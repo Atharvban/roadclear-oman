@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5001;
 
 // 2. Explicit CORS Setup
 app.use(cors({
-  origin: '*', // Allows requests from your Render frontend static site
+  origin: '*',
   methods: ['GET', 'POST'],
   credentials: true
 }));
@@ -124,11 +124,7 @@ const distPath = path.join(__dirname, 'frontend/dist');
 
 app.use(express.static(distPath));
 
-// Catch-all route to serve React's index.html for SPA routing
-// Change this:
-app.get('(.*)', (req, res) => {
-
-// Catch-all route for SPA fallback (Express 5 compatible)
+// Catch-all route for Express 5 compatibility
 app.get('(.*)', (req, res) => {
   const indexPath = path.join(distPath, 'index.html');
   if (fs.existsSync(indexPath)) {
@@ -136,4 +132,8 @@ app.get('(.*)', (req, res) => {
   } else {
     res.status(404).send('Build files missing! Please check Render build logs.');
   }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
