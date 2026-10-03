@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RoadClear Oman</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --carbon:   #0A0A0B;
+  --red:      #FF3E3E;
+  --red-dim:  rgba(255,62,62,0.12);
+  --red-glow: rgba(255,62,62,0.35);
+  --concrete: #E0E0E0;
+  --white:    #FFFFFF;
+  --slate:    #1C1C1E;
+  --panel:    #111113;
+  --border:   #1E1E22;
+  --dim:      #555558;
+  --dim2:     #888;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--carbon);
+  color: var(--concrete);
+  font-family: 'Space Grotesk', sans-serif;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* grain */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9000;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--carbon); }
+::-webkit-scrollbar-thumb { background: var(--red); }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 2.5rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,11,0.96);
+  backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 0.7rem;
+}
+
+.logo-mark {
+  width: 28px; height: 28px;
+  border: 1.5px solid var(--red);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+
+.logo-mark::before {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  background: var(--red);
+  animation: logoPulse 2s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.6); }
+}
+
+.logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+
+.logo-text span { color: var(--red); }
+
+.nav-system {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  display: flex; align-items: center; gap: 2rem;
+}
+
+.sys-item { display: flex; align-items: center; gap: 0.4rem; }
+
+.sys-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #00d45a;
+  animation: sysBlink 3s ease-in-out infinite;
+}
+
+@keyframes sysBlink {
+  0%,90%,100% { opacity: 1; }
+  95% { opacity: 0; }
+}
+
+.nav-actions { display: flex; gap: 0.8rem; }
+
+.btn-nav-primary {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--carbon);
+  background: var(--white);
+  border: none;
+  padding: 0.55rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-nav-primary:hover { background: var(--concrete); }
+
+.btn-nav-outline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: transparent;
+  border: 1.5px solid var(--red);
+  padding: 0.55rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-nav-outline:hover { background: var(--red-dim); }
+
+/* ─── HERO ─── */
+#hero {
+  min-height: 100vh;
+  position: relative;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding-bottom: 5rem;
+  overflow: hidden;
+}
+
+/* cinematic dark plate BG */
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 65% 45%, rgba(255,62,62,0.04) 0%, transparent 70%),
+    linear-gradient(170deg, #0d0d0f 0%, #050505 100%);
+}
+
+/* plate scanner animation */
+.scanner-scene {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-20%, -52%);
+  width: 560px; height: 340px;
+}
+
+.plate-body {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 320px; height: 160px;
+  background: var(--slate);
+  border: 2px solid #2a2a2e;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow:
+    0 0 60px rgba(0,0,0,0.8),
+    inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.plate-inner {
+  width: 290px; height: 132px;
+  border: 1.5px solid #333;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: #0e1014;
+  position: relative;
+}
+
+.plate-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 2.6rem;
+  letter-spacing: 0.15em;
+  color: #c8c8c8;
+}
+
+.plate-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+/* scan laser line */
+.laser-line {
+  position: absolute;
+  top: 0; left: -10px; right: -10px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--red), var(--red), transparent);
+  box-shadow: 0 0 12px 3px rgba(255,62,62,0.5);
+  animation: laserScan 2.4s ease-in-out infinite;
+}
+
+@keyframes laserScan {
+  0%   { top: 0;    opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* scan corner brackets */
+.bracket {
+  position: absolute;
+  width: 18px; height: 18px;
+}
+.bracket-tl { top: -8px; left: -8px; border-top: 2px solid var(--red); border-left: 2px solid var(--red); }
+.bracket-tr { top: -8px; right: -8px; border-top: 2px solid var(--red); border-right: 2px solid var(--red); }
+.bracket-bl { bottom: -8px; left: -8px; border-bottom: 2px solid var(--red); border-left: 2px solid var(--red); }
+.bracket-br { bottom: -8px; right: -8px; border-bottom: 2px solid var(--red); border-right: 2px solid var(--red); }
+
+/* OCR data stream beside plate */
+.ocr-stream {
+  position: absolute;
+  right: -10px; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--red);
+  display: flex; flex-direction: column; gap: 0.35rem;
+  opacity: 0.7;
+}
+
+.ocr-line {
+  white-space: nowrap;
+  animation: ocrFlicker 0.1s steps(1) infinite;
+}
+
+@keyframes ocrFlicker {
+  0%,100% { opacity: 0.7; }
+  50% { opacity: 0.5; }
+}
+
+.ocr-line:nth-child(2) { animation-delay: 0.05s; }
+.ocr-line:nth-child(3) { animation-delay: 0.03s; }
+.ocr-line:nth-child(4) { animation-delay: 0.08s; }
+
+/* big X-Y crosshairs */
+.crosshair-h, .crosshair-v {
+  position: absolute;
+  background: rgba(255,62,62,0.08);
+}
+.crosshair-h { top: 50%; left: 0; right: 0; height: 1px; }
+.crosshair-v { left: 50%; top: 0; bottom: 0; width: 1px; }
+
+.scan-ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 420px; height: 280px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(255,62,62,0.12);
+  animation: ringExpand 3s ease-out infinite;
+}
+
+@keyframes ringExpand {
+  0% { opacity: 0.6; transform: translate(-50%,-50%) scale(0.95); }
+  100% { opacity: 0; transform: translate(-50%,-50%) scale(1.15); }
+}
+
+/* hero text block */
+.hero-text {
+  position: relative; z-index: 2;
+  padding: 0 2.5rem;
+  animation: fadeUp 0.9s ease-out both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 32px; height: 1px; background: var(--red);
+}
+
+h1.hero-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(4.5rem, 10vw, 8.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 1.8rem;
+}
+
+h1.hero-title .red { color: var(--red); }
+
+.hero-sub {
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--dim2);
+  max-width: 520px;
+  margin-bottom: 2.5rem;
+}
+
+.hero-sub strong { color: var(--concrete); font-weight: 400; }
+
+.hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+.btn-primary {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--carbon);
+  background: var(--white);
+  border: none;
+  padding: 1rem 2.2rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+
+.btn-primary:hover { background: var(--concrete); transform: translateY(-1px); }
+
+.btn-outline-red {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: transparent;
+  border: 1.5px solid var(--red);
+  padding: 1rem 2.2rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+
+.btn-outline-red:hover { background: var(--red-dim); transform: translateY(-1px); }
+
+/* ticker below hero */
+.hero-ticker {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  border-top: 1px solid var(--border);
+  background: rgba(10,10,11,0.95);
+  overflow: hidden;
+  height: 38px;
+  display: flex; align-items: center;
+}
+
+.ticker-label {
+  flex-shrink: 0;
+  padding: 0 1.5rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: var(--red);
+  text-transform: uppercase;
+  border-right: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.ticker-track {
+  display: flex; align-items: center;
+  animation: tickerScroll 22s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.ticker-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  padding: 0 2rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+
+.ticker-item .live { color: var(--red); }
+.ticker-sep { color: var(--border); }
+
+/* ─── SECTION SHARED ─── */
+section { padding: 7rem 2.5rem; }
+
+.s-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--red);
+  display: flex; align-items: center; gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.s-tag::before {
+  content: '';
+  display: inline-block; width: 24px; height: 1px; background: var(--red);
+}
+
+.s-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+/* ─── CORE SYSTEMS ─── */
+#systems {
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+#systems::before {
+  content: '01 02 03';
+  position: absolute; right: 2rem; top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 14rem;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.02);
+  letter-spacing: -0.05em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.systems-header {
+  max-width: 500px;
+  margin-bottom: 4rem;
+}
+
+.systems-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+}
+
+.sys-card {
+  background: var(--panel);
+  padding: 2.8rem 2.4rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+  cursor: default;
+}
+
+.sys-card:hover { background: #131316; }
+
+.sys-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.sys-card:hover::before { transform: scaleX(1); }
+
+.sys-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  margin-bottom: 2rem;
+}
+
+.sys-icon {
+  width: 44px; height: 44px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  transition: border-color 0.2s;
+}
+
+.sys-card:hover .sys-icon { border-color: var(--red); }
+
+.sys-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 0.6rem;
+}
+
+.sys-body {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--dim2);
+}
+
+.sys-body strong { color: var(--concrete); font-weight: 400; }
+
+.sys-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 1.8rem;
+  background: var(--red-dim);
+  border: 1px solid rgba(255,62,62,0.2);
+  padding: 0.35rem 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+
+/* ─── LIVE TERMINAL ─── */
+#terminal {
+  background: var(--carbon);
+  padding: 7rem 0;
+  overflow: hidden;
+}
+
+.terminal-layout {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 0;
+  border: 1px solid var(--border);
+}
+
+/* Map side */
+.map-panel {
+  position: relative;
+  background: #080809;
+  min-height: 540px;
+  overflow: hidden;
+}
+
+.map-bg-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+
+/* Pulsing city markers */
+.map-pulse {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.pulse-ring {
+  position: relative;
+  width: 12px; height: 12px;
+}
+
+.pulse-ring::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: var(--red);
+  animation: mapPulse 2.5s ease-out infinite;
+}
+
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  top: -8px; left: -8px;
+  width: 28px; height: 28px;
+  border: 1px solid var(--red);
+  border-radius: 50%;
+  animation: mapPulse 2.5s ease-out infinite 0.5s;
+}
+
+@keyframes mapPulse {
+  0% { opacity: 0.9; transform: scale(0.8); }
+  100% { opacity: 0; transform: scale(2); }
+}
+
+.map-label {
+  position: absolute;
+  top: 18px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.12em;
+  color: var(--red);
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.map-overlay-text {
+  position: absolute; bottom: 1.5rem; left: 1.5rem;
+}
+
+.mot-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 0.3rem;
+}
+
+.mot-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--red);
+  letter-spacing: -0.02em;
+}
+
+/* Terminal side */
+.terminal-panel {
+  background: #060608;
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+}
+
+.term-topbar {
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 0.6rem;
+}
+
+.term-dot { width: 10px; height: 10px; border-radius: 50%; }
+.term-dot-r { background: #ff5f57; }
+.term-dot-y { background: #febc2e; }
+.term-dot-g { background: #28c840; }
+
+.term-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--dim);
+  margin-left: auto;
+  text-transform: uppercase;
+}
+
+.term-body {
+  padding: 1.4rem;
+  flex: 1;
+  overflow: hidden;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  line-height: 1.9;
+  display: flex; flex-direction: column; gap: 0;
+}
+
+.term-prompt {
+  color: var(--dim);
+  margin-bottom: 0.4rem;
+}
+
+.term-prompt span { color: var(--red); }
+
+.term-line {
+  display: flex; gap: 0.7rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  animation: termFadeIn 0.4s ease-out both;
+}
+
+.term-line:nth-child(2) { animation-delay: 0.3s; }
+.term-line:nth-child(3) { animation-delay: 0.6s; }
+.term-line:nth-child(4) { animation-delay: 0.9s; }
+.term-line:nth-child(5) { animation-delay: 1.2s; }
+.term-line:nth-child(6) { animation-delay: 1.5s; }
+.term-line:nth-child(7) { animation-delay: 1.8s; }
+
+@keyframes termFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.term-tag {
+  flex-shrink: 0;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid;
+  text-transform: uppercase;
+  align-self: flex-start;
+  margin-top: 0.15rem;
+}
+
+.tag-scan  { color: var(--red); border-color: var(--red); background: var(--red-dim); }
+.tag-status { color: #facc15; border-color: rgba(250,204,21,0.3); background: rgba(250,204,21,0.05); }
+.tag-mkt   { color: #60a5fa; border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.05); }
+.tag-ok    { color: #4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.05); }
+
+.term-text { color: var(--concrete); font-size: 0.68rem; flex: 1; }
+.term-text .hl { color: var(--white); font-weight: 700; }
+.term-text .mute { color: var(--dim); }
+
+.term-cursor {
+  width: 8px; height: 14px;
+  background: var(--red);
+  display: inline-block;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.term-stats {
+  margin: 0;
+  padding: 1.2rem 1.4rem;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+}
+
+.ts-cell {
+  background: #060608;
+  padding: 0.9rem 0.8rem;
+}
+
+.ts-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.ts-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.52rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-top: 0.2rem;
+}
+
+.terminal-section-padding { padding: 0 2.5rem; }
+
+.term-section-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 2.5rem;
+}
+
+/* ─── LEGACY PSA ─── */
+#legacy {
+  background: var(--white);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.legacy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+.legacy-left {
+  background: var(--carbon);
+  padding: 7rem 3.5rem;
+  display: flex; flex-direction: column; justify-content: space-between;
+  border-right: 1px solid #111;
+  position: relative;
+  overflow: hidden;
+}
+
+.legacy-left::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,62,62,0.04) 0%, transparent 60%);
+}
+
+.amana-quote {
+  position: relative; z-index: 1;
+}
+
+.quote-line {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  color: var(--white);
+}
+
+.quote-xl { font-size: clamp(3.5rem, 7vw, 6.5rem); }
+.quote-outline {
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--red);
+}
+.quote-red { font-size: clamp(3.5rem, 7vw, 6.5rem); color: var(--red); }
+
+.amana-attr {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-top: 2.5rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+
+.amana-attr::before {
+  content: '';
+  display: inline-block; width: 24px; height: 1px; background: var(--red);
+}
+
+.legacy-cta-block {
+  position: relative; z-index: 1;
+}
+
+.legacy-cta-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 1rem;
+}
+
+.legacy-right {
+  background: #0e0e10;
+  padding: 7rem 3.5rem;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 3rem;
+}
+
+.legacy-fact {
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.legacy-fact:last-child { border-bottom: none; padding-bottom: 0; }
+
+.lf-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(3rem, 6vw, 5rem);
+  letter-spacing: -0.03em;
+  color: var(--red);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.lf-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 0.6rem;
+}
+
+.lf-body {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--dim2);
+  max-width: 340px;
+}
+
+/* farewell strip */
+.farewell-strip {
+  background: var(--red);
+  padding: 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2rem;
+}
+
+.fs-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--white);
+}
+
+.fs-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.65);
+  text-transform: uppercase;
+  margin-top: 0.3rem;
+}
+
+.btn-farewell {
+  flex-shrink: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  background: var(--white);
+  border: none;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.15s;
+}
+
+.btn-farewell:hover { background: var(--concrete); }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--carbon);
+  border-top: 1px solid var(--border);
+  padding: 2rem 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+
+.footer-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  display: flex; align-items: center; gap: 0.6rem;
+}
+
+.fl-red { color: var(--red); }
+
+.footer-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.footer-links {
+  display: flex; gap: 2rem; list-style: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.footer-links a {
+  color: var(--dim);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--red); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .systems-grid { grid-template-columns: 1fr; }
+  .terminal-layout { grid-template-columns: 1fr; }
+  .legacy-grid { grid-template-columns: 1fr; }
+  .farewell-strip { flex-direction: column; text-align: center; }
+  nav .nav-system { display: none; }
+  #systems::before { display: none; }
+  .scanner-scene { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-mark"></div>
+    <div class="logo-text">Road<span>Clear</span></div>
+  </div>
+
+  <div class="nav-system">
+    <div class="sys-item"><div class="sys-dot"></div>ROP PIPELINE ACTIVE</div>
+    <div class="sys-item">MUSCAT GRID · 24/7</div>
+    <div class="sys-item">v2.4.1</div>
+  </div>
+
+  <div class="nav-actions">
+    <a href="http://localhost:5173" class="btn-nav-primary">Report Vehicle</a>
+    <a href="http://localhost:5173"class="btn-nav-outline">File Report</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Plate scanner scene -->
+  <div class="scanner-scene">
+    <div class="crosshair-h"></div>
+    <div class="crosshair-v"></div>
+    <div class="scan-ring"></div>
+    <div class="scan-ring" style="animation-delay:1.5s;"></div>
+
+    <div class="plate-body">
+      <div class="plate-inner">
+        <div class="bracket bracket-tl"></div>
+        <div class="bracket bracket-tr"></div>
+        <div class="bracket bracket-bl"></div>
+        <div class="bracket bracket-br"></div>
+        <div class="laser-line"></div>
+        <div class="plate-num">4829 · AR</div>
+        <div class="plate-sub">سلطنة عمان · Sultanate of Oman</div>
+      </div>
+    </div>
+
+    <div class="ocr-stream">
+      <div class="ocr-line">[OCR] CONF: 98.7%</div>
+      <div class="ocr-line">[GPS] 23.5880° N</div>
+      <div class="ocr-line">[GPS] 58.3829° E</div>
+      <div class="ocr-line">[DB]  QUERYING ROP...</div>
+      <div class="ocr-line">[STATUS] FLAGGED_45D</div>
+    </div>
+  </div>
+
+  <!-- Text -->
+  <div class="hero-text">
+    <div class="hero-eyebrow">Civil Tech Platform · Muscat</div>
+    <h1 class="hero-title">
+      Clear<br>The<br><span class="red">Streets.</span>
+    </h1>
+    <p class="hero-sub">
+      Oman's unified platform for <strong>vehicle handover</strong> and <strong>civic accountability.</strong><br>
+      Sell fast. Report smart. Leave clean.
+    </p>
+    <div class="hero-ctas">
+      <a href="http://localhost:5173" class="btn-primary">↗ File Report</a>
+      <a href="http://localhost:5173" class="btn-outline-red">⬡ File Report</a>
+    </div>
+  </div>
+
+  <!-- Live ticker -->
+  <div class="hero-ticker">
+    <div class="ticker-label">⬡ Live Feed</div>
+    <div class="ticker-track">
+      <span class="ticker-item"><span class="live">[SCAN]</span> Plate 7721·BA · Ruwi · Flagged 31 days<span class="ticker-sep">|</span></span>
+      <span class="ticker-item"><span class="live">[SOLD]</span> Toyota Prado 2019 · Al Khuwair · Sold in 6h<span class="ticker-sep">|</span></span>
+      <span class="ticker-item"><span class="live">[RESOLVED]</span> 12 vehicles cleared · Baushar District<span class="ticker-sep">|</span></span>
+      <span class="ticker-item"><span class="live">[ALERT]</span> Car Watch triggered · Madinat Sultan Qaboos<span class="ticker-sep">|</span></span>
+      <span class="ticker-item"><span class="live">[LISTED]</span> Honda Accord 2021 · OMR 4,200 · Verified ID<span class="ticker-sep">|</span></span>
+      <span class="ticker-item"><span class="live">[SCAN]</span> Plate 7721·BA · Ruwi · Flagged 31 days<span class="ticker-sep">|</span></span>
+      <span class="ticker-item"><span class="live">[SOLD]</span> Toyota Prado 2019 · Al Khuwair · Sold in 6h<span class="ticker-sep">|</span></span>
+      <span class="ticker-item"><span class="live">[RESOLVED]</span> 12 vehicles cleared · Baushar District<span class="ticker-sep">|</span></span>
+      <span class="ticker-item"><span class="live">[ALERT]</span> Car Watch triggered · Madinat Sultan Qaboos<span class="ticker-sep">|</span></span>
+      <span class="ticker-item"><span class="live">[LISTED]</span> Honda Accord 2021 · OMR 4,200 · Verified ID<span class="ticker-sep">|</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CORE SYSTEMS ─── -->
+<section id="systems">
+  <div class="systems-header">
+    <div class="s-tag">Core Systems</div>
+    <h2 class="s-title">Three<br>Engines.</h2>
+    <p style="font-size:0.95rem;font-weight:300;color:var(--dim2);line-height:1.75;max-width:420px;">
+      One platform. Built for the expat who needs to leave, the citizen who needs to report, and the neighbour who needs accountability.
+    </p>
+  </div>
+
+  <div class="systems-grid">
+    <!-- 01 Handover -->
+    <div class="sys-card">
+      <div class="sys-num">SYS // 01</div>
+      <div class="sys-icon">🔑</div>
+      <div class="sys-name">Handover</div>
+      <p class="sys-body">
+        <strong>48-hour urgent listings</strong> for departing expats. Verified Civil ID only. Escrow-protected payment. Transfer paperwork auto-generated for ROP submission.
+      </p>
+      <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--dim);display:flex;justify-content:space-between;">
+          <span>Avg. sale time</span><span style="color:var(--white);">18 hrs</span>
+        </div>
+        <div style="height:2px;background:var(--border);">
+          <div style="width:75%;height:100%;background:var(--red);"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--dim);display:flex;justify-content:space-between;">
+          <span>ID verification</span><span style="color:var(--white);">Civil ID + OTP</span>
+        </div>
+      </div>
+      <div class="sys-pill">⬡ Urgent Mode Active</div>
+    </div>
+
+    <!-- 02 Street Report -->
+    <div class="sys-card">
+      <div class="sys-num">SYS // 02</div>
+      <div class="sys-icon">📡</div>
+      <div class="sys-name">Street Report</div>
+      <p class="sys-body">
+        <strong>One-tap snap.</strong> Automatic GPS tagging and OCR plate extraction. Report feeds directly into the <strong>ROP pipeline</strong> — no forms, no friction, no follow-up needed.
+      </p>
+      <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--dim);display:flex;justify-content:space-between;">
+          <span>OCR accuracy</span><span style="color:var(--white);">97.4%</span>
+        </div>
+        <div style="height:2px;background:var(--border);">
+          <div style="width:97%;height:100%;background:var(--red);"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--dim);display:flex;justify-content:space-between;">
+          <span>Submission time</span><span style="color:var(--white);">&lt; 9 seconds</span>
+        </div>
+      </div>
+      <div class="sys-pill">⬡ ROP Pipeline Live</div>
+    </div>
+
+    <!-- 03 Car Watch -->
+    <div class="sys-card">
+      <div class="sys-num">SYS // 03</div>
+      <div class="sys-icon">🔔</div>
+      <div class="sys-name">Car Watch</div>
+      <p class="sys-body">
+        <strong>3-person neighbourhood validation</strong> before escalation. SMS alerts at 7, 30, and 45-day thresholds. Prevents false reports. Builds community accountability loops.
+      </p>
+      <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.5rem;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--dim);display:flex;justify-content:space-between;">
+          <span>False report rate</span><span style="color:var(--white);">1.2%</span>
+        </div>
+        <div style="height:2px;background:var(--border);">
+          <div style="width:99%;height:100%;background:var(--red);"></div>
+        </div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--dim);display:flex;justify-content:space-between;">
+          <span>Validators required</span><span style="color:var(--white);">3 unique IDs</span>
+        </div>
+      </div>
+      <div class="sys-pill">⬡ Neighbourhood Mode</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LIVE TERMINAL ─── -->
+<section id="terminal" style="padding:7rem 0;background:var(--carbon);">
+  <div class="terminal-section-padding">
+    <div class="term-section-header">
+      <div>
+        <div class="s-tag">Admin Intelligence</div>
+        <h2 class="s-title">Live<br>Terminal.</h2>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.15em;color:var(--dim);text-transform:uppercase;margin-bottom:0.3rem;">Last sync</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--red);">00:00:47 ago</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="terminal-section-padding">
+    <div class="terminal-layout">
+      <!-- Muscat map simulation -->
+      <div class="map-panel">
+        <svg class="map-bg-svg" viewBox="0 0 700 540" preserveAspectRatio="xMidYMid slice">
+          <rect width="700" height="540" fill="#060608"/>
+
+          <!-- Grid -->
+          <g stroke="#111114" stroke-width="0.8">
+            <line x1="0" y1="90"  x2="700" y2="90"/>
+            <line x1="0" y1="180" x2="700" y2="180"/>
+            <line x1="0" y1="270" x2="700" y2="270"/>
+            <line x1="0" y1="360" x2="700" y2="360"/>
+            <line x1="0" y1="450" x2="700" y2="450"/>
+            <line x1="100" y1="0" x2="100" y2="540"/>
+            <line x1="200" y1="0" x2="200" y2="540"/>
+            <line x1="300" y1="0" x2="300" y2="540"/>
+            <line x1="400" y1="0" x2="400" y2="540"/>
+            <line x1="500" y1="0" x2="500" y2="540"/>
+            <line x1="600" y1="0" x2="600" y2="540"/>
+          </g>
+
+          <!-- Roads / arteries -->
+          <g stroke="#1c1c22" stroke-width="2" fill="none">
+            <path d="M0,270 Q150,260 300,270 T700,265"/>
+            <path d="M350,0 Q360,150 350,270 T340,540"/>
+            <path d="M0,180 Q200,190 400,180 T700,175"/>
+            <path d="M0,380 Q180,370 350,380 T700,375"/>
+            <path d="M150,0 Q160,120 170,270 T160,540"/>
+            <path d="M520,0 Q510,150 520,270 T510,540"/>
+            <path d="M0,90 Q200,85 400,90 T700,88"/>
+          </g>
+
+          <!-- Coastal edge suggestion -->
+          <path d="M0,480 Q100,470 200,478 T400,470 T600,475 T700,468" stroke="#1a2030" stroke-width="1.5" fill="none"/>
+          <rect x="0" y="490" width="700" height="50" fill="#080810" opacity="0.6"/>
+
+          <!-- District labels -->
+          <g font-family="JetBrains Mono" font-size="7" fill="#222226" letter-spacing="2">
+            <text x="60" y="140">RUWI</text>
+            <text x="360" y="130">AL KHUWAIR</text>
+            <text x="200" y="330">BAUSHAR</text>
+            <text x="480" y="320">QURUM</text>
+            <text x="100" y="430">MUTTRAH</text>
+            <text x="420" y="440">DARSAIT</text>
+          </g>
+
+          <!-- Coord labels -->
+          <text x="8" y="534" font-family="JetBrains Mono" font-size="7" fill="#1c1c22" letter-spacing="1">23.5°N</text>
+          <text x="600" y="534" font-family="JetBrains Mono" font-size="7" fill="#1c1c22" letter-spacing="1">58.4°E</text>
+        </svg>
+
+        <!-- Pulse markers -->
+        <div class="map-pulse" style="left:24%;top:30%;">
+          <div class="pulse-ring"></div>
+          <div class="map-label">RUWI</div>
+        </div>
+        <div class="map-pulse" style="left:55%;top:25%;animation-delay:0.8s;">
+          <div class="pulse-ring" style="animation-delay:0.8s;"></div>
+          <div class="pulse-ring" style="animation-delay:1.3s;--a:1.3s"></div>
+          <div class="map-label">AL KHUWAIR</div>
+        </div>
+        <div class="map-pulse" style="left:38%;top:58%;animation-delay:1.6s;">
+          <div class="pulse-ring" style="animation-delay:1.6s;"></div>
+          <div class="map-label">BAUSHAR</div>
+        </div>
+        <div class="map-pulse" style="left:71%;top:55%;animation-delay:0.4s;">
+          <div class="pulse-ring" style="animation-delay:0.4s;"></div>
+          <div class="map-label">QURUM</div>
+        </div>
+        <div class="map-pulse" style="left:17%;top:75%;animation-delay:2s;">
+          <div class="pulse-ring" style="animation-delay:2s;"></div>
+          <div class="map-label">MUTTRAH</div>
+        </div>
+
+        <!-- Map overlay stat -->
+        <div class="map-overlay-text">
+          <div class="mot-label">Active Reports</div>
+          <div class="mot-val">247</div>
+        </div>
+
+        <!-- Map top label -->
+        <div style="position:absolute;top:1.2rem;left:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.55rem;letter-spacing:0.18em;color:var(--dim);text-transform:uppercase;">
+          Muscat Governorate · Live Grid
+        </div>
+      </div>
+
+      <!-- Terminal -->
+      <div class="terminal-panel">
+        <div class="term-topbar">
+          <div class="term-dot term-dot-r"></div>
+          <div class="term-dot term-dot-y"></div>
+          <div class="term-dot term-dot-g"></div>
+          <div class="term-title">roadclear-admin v2.4</div>
+        </div>
+
+        <div class="term-body">
+          <div class="term-prompt">
+            <span style="color:var(--red);">roadclear</span>@<span style="color:var(--dim);">muscat-grid</span>:~$ roadclear --status
+          </div>
+
+          <div class="term-line">
+            <div class="term-tag tag-scan">SCAN</div>
+            <div class="term-text">Plate: <span class="hl">4829 AR</span> <span class="mute">· Ruwi · Detected now</span></div>
+          </div>
+
+          <div class="term-line">
+            <div class="term-tag tag-status">STATUS</div>
+            <div class="term-text">Abandoned <span class="hl">45 days.</span> <span class="mute">SMS dispatched to owner.</span></div>
+          </div>
+
+          <div class="term-line">
+            <div class="term-tag tag-mkt">MARKET</div>
+            <div class="term-text"><span class="hl">124 vehicles</span> <span class="mute">listed this week.</span></div>
+          </div>
+
+          <div class="term-line">
+            <div class="term-tag tag-ok">RESOLVED</div>
+            <div class="term-text"><span class="hl">89 vehicles</span> <span class="mute">cleared from Baushar.</span></div>
+          </div>
+
+          <div class="term-line">
+            <div class="term-tag tag-scan">WATCH</div>
+            <div class="term-text">Car Watch: <span class="hl">3/3 validators</span> <span class="mute">confirmed · MSQ.</span></div>
+          </div>
+
+          <div class="term-line">
+            <div class="term-tag tag-ok">HANDOVER</div>
+            <div class="term-text">Toyota Prado 2019 <span class="hl">OMR 4,200</span> <span class="mute">— sold 6h.</span></div>
+          </div>
+
+          <div class="term-line">
+            <div class="term-tag tag-status">ALERT</div>
+            <div class="term-text">Plate <span class="hl">7721 BA</span> <span class="mute">escalated → ROP pipeline.</span></div>
+          </div>
+
+          <div style="margin-top:0.4rem;font-size:0.68rem;">
+            <span style="color:var(--dim);">$ </span><span class="term-cursor"></span>
+          </div>
+        </div>
+
+        <div class="term-stats">
+          <div class="ts-cell">
+            <div class="ts-val" style="color:var(--red);">247</div>
+            <div class="ts-label">Active Reports</div>
+          </div>
+          <div class="ts-cell">
+            <div class="ts-val">124</div>
+            <div class="ts-label">Listed This Week</div>
+          </div>
+          <div class="ts-cell">
+            <div class="ts-val" style="color:#4ade80;">89</div>
+            <div class="ts-label">Vehicles Cleared</div>
+          </div>
+          <div class="ts-cell">
+            <div class="ts-val">18h</div>
+            <div class="ts-label">Avg Sale Time</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LEGACY PSA ─── -->
+<section id="legacy">
+  <div class="legacy-grid">
+    <!-- Left: The Quote -->
+    <div class="legacy-left">
+      <div class="amana-quote">
+        <span class="quote-line quote-xl">The</span>
+        <span class="quote-line quote-xl">Street</span>
+        <span class="quote-line quote-outline">Is An</span>
+        <span class="quote-line quote-red">Amana.</span>
+        <div class="amana-attr">Complete The Farewell Handshake</div>
+      </div>
+
+      <div class="legacy-cta-block">
+        <div class="legacy-cta-label">// Before You Leave Oman</div>
+        <div style="display:flex;flex-direction:column;gap:0.8rem;margin-top:0.5rem;">
+          <a href="#" class="btn-primary" style="text-align:center;">↗ List Your Vehicle Now</a>
+          <div style="font-family:'JetBrains Mono',monospace;font-size:0.58rem;letter-spacing:0.12em;color:var(--dim);text-transform:uppercase;text-align:center;">
+            Civil ID · 48h Listing · Zero Commission
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Civic facts -->
+    <div class="legacy-right">
+      <div class="legacy-fact">
+        <div class="lf-num">6,800+</div>
+        <div class="lf-label">// Scale of Problem</div>
+        <p class="lf-body">Abandoned or untransferred vehicles estimated across Muscat Governorate — each one a legal liability and a civic burden left behind.</p>
+      </div>
+      <div class="legacy-fact">
+        <div class="lf-num">OMR 500</div>
+        <div class="lf-label">// Cost of Inaction</div>
+        <p class="lf-body">Average fine for improper vehicle registration transfer. RoadClear automates the paperwork — so it never happens to you.</p>
+      </div>
+      <div class="legacy-fact">
+        <div class="lf-num">3 taps.</div>
+        <div class="lf-label">// The Solution</div>
+        <p class="lf-body">Snap. Verify. Submit. Street reports take under 9 seconds. The ROP pipeline handles the rest. No forms. No phone calls. No follow-up.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Farewell strip -->
+  <div class="farewell-strip">
+    <div>
+      <div class="fs-text">Don't Leave a Ghost on the Street.</div>
+      <div class="fs-sub">// Sell before you fly. It's the right thing to do.</div>
+    </div>
+    <a href="#" class="btn-farewell">Start Listing ↗</a>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-logo">
+    <div style="width:20px;height:20px;border:1.5px solid var(--red);display:flex;align-items:center;justify-content:center;">
+      <div style="width:6px;height:6px;background:var(--red);"></div>
+    </div>
+    Road<span class="fl-red">Clear</span> Oman
+  </div>
+
+  <div class="footer-meta">// Civic Infrastructure · Muscat Governorate · v2.4.1</div>
+
+  <ul class="footer-links">
+    <li><a href="#">Marketplace</a></li>
+    <li><a href="#">File Report</a></li>
+    <li><a href="#">Car Watch</a></li>
+    <li><a href="#">ROP Data</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Feed · RoadClear Oman</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    background: #0A0A0B;
+    color: #FFFFFF;
+    font-family: 'Space Grotesk', sans-serif;
+    padding: 3rem 2rem;
+  }
+  h1 { color: #FF3E3E; margin-bottom: 2rem; font-size: 2rem; text-transform: uppercase; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .report-card {
+    background: #111113;
+    border: 1px solid #1E1E22;
+    padding: 1.5rem;
+  }
+  .report-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border: 1px solid #1E1E22;
+    margin-top: 1rem;
+  }
+  .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #888888;
+    margin-bottom: 0.5rem;
+  }
+  .val { color: #FFF; font-weight: bold; }
+</style>
+</head>
+<body>
+
+  <h1>Received Street Reports</h1>
+  <div id="reportsContainer" class="grid">Loading reports...</div>
+
+  <script>
+    async function fetchReports() {
+      const res = await fetch('/api/reports');
+      const reports = await res.json();
+      const container = document.getElementById('reportsContainer');
+
+      if (reports.length === 0) {
+        container.innerHTML = '<p style="color:#888;">No reports received yet.</p>';
+        return;
+      }
+
+      container.innerHTML = reports.map(r => `
+        <div class="report-card">
+          <div class="meta">TIMESTAMP: <span class="val">${r.timestamp}</span></div>
+          <div class="meta">NAME: <span class="val">${r.fullName}</span></div>
+          <div class="meta">PHONE: <span class="val">${r.phone}</span></div>
+          <img src="${r.imagePath}" alt="Vehicle Evidence">
+        </div>
+      `).join('');
+    }
+
+    fetchReports();
+  </script>
+</body>
+</html>
