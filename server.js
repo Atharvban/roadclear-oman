@@ -1,15 +1,13 @@
-
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
+import multer from 'multer';
 
 // Standard ES module workaround for __dirname in Node
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const fs = require('fs');
-const multer = require('multer');
-
 
 const app = express();
 
@@ -121,8 +119,8 @@ app.get('/api/reports', (req, res) => {
   });
 });
 
-// Serve static files directly from Vite's output 'dist' folder
-const distPath = path.join(__dirname, 'dist');
+// Serve static files directly from Vite's output 'dist' folder inside frontend/
+const distPath = path.join(__dirname, 'frontend/dist');
 
 app.use(express.static(distPath));
 
@@ -134,4 +132,8 @@ app.get('*', (req, res) => {
   } else {
     res.status(404).send('Build files missing! Please check Render build logs.');
   }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
