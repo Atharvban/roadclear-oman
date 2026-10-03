@@ -114,20 +114,17 @@ app.get('/api/reports', (req, res) => {
   });
 });
 
-// 3. Resolve Built Frontend Path (checks ./dist first, then ./frontend/dist)
-const distPath = fs.existsSync(path.join(__dirname, 'dist'))
-  ? path.join(__dirname, 'dist')
-  : path.join(__dirname, 'frontend', 'dist');
+// Serve static files directly from Vite's output 'dist' folder
+const distPath = path.join(__dirname, 'dist');
 
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath));
+app.use(express.static(distPath));
 
-  // SPA Catch-All Route: send index.html for any frontend navigation routes
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
-  });
-}
-
-app.listen(PORT, () => {
-  console.log(`RoadClear server running on port ${PORT}`);
+// Catch-all route to serve React's index.html for SPA routing
+app.get('*', (req, res) => {
+  const indexPath = path.join(distPath, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send('Build files missing! Please check Render build logs.');
+  }
 });
