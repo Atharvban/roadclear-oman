@@ -5,7 +5,7 @@ export default function App() {
   const [status, setStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (event) => {
+const handleSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
     setStatus('[PROCESSING] Transmitting report to ROP pipeline...');
@@ -13,7 +13,8 @@ export default function App() {
     const formData = new FormData(event.target);
 
     try {
-      const response = await fetch('http://localhost:5001/api/report-vehicle', {
+      // Send directly to Express backend service endpoint
+      const response = await fetch('https://roadclear-oman-backend.onrender.com/api/report-vehicle', {
         method: 'POST',
         body: formData,
       });
@@ -28,7 +29,7 @@ export default function App() {
       }
     } catch (error) {
       console.error('Submission error:', error);
-      setStatus('[ERROR] Connection refused. Check if server.js is running on port 5001.');
+      setStatus('[ERROR] Connection failed. Please check network/server response.');
     } finally {
       setIsSubmitting(false);
     }
