@@ -134,6 +134,17 @@ app.get('(.*)', (req, res) => {
   }
 });
 
+// ... all your app.post and app.get API routes are above here ...
+
+// Catch-all route for SPA fallback (MUST BE LAST)
+app.get('/*splat', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
