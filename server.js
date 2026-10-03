@@ -48,20 +48,19 @@ const upload = multer({
   }
 });
 
-// Static assets
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(uploadDir));
-
+// Middleware for parsing requests
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// 3. Serve Built React Frontend Static Files (if backend is serving frontend)
-const frontendDistPath = path.join(__dirname, 'frontend', 'dist');
-if (fs.existsSync(frontendDistPath)) {
-  app.use(express.static(frontendDistPath));
+// Serve uploads folder
+app.use('/uploads', express.static(uploadDir));
+
+// Serve static assets from public/ if present
+if (fs.existsSync(path.join(__dirname, 'public'))) {
+  app.use(express.static(path.join(__dirname, 'public')));
 }
 
-// API route to handle vehicle report form submissions with extra fields
+// API route to handle vehicle report form submissions
 app.post('/api/report-vehicle', upload.any(), (req, res) => {
   const fullName = req.body.fullName || req.body.reporterName;
   const phone = req.body.phone || req.body.reporterPhone;
@@ -115,10 +114,17 @@ app.get('/api/reports', (req, res) => {
   });
 });
 
-// 4. SPA Catch-All Route for Frontend Single Page Navigation
-if (fs.existsSync(frontendDistPath)) {
+// 3. Resolve Built Frontend Path (checks ./dist first, then ./frontend/dist)
+const distPath = fs.existsSync(path.join(__dirname, 'dist'))
+  ? path.join(__dirname, 'dist')
+  : path.join(__dirname, 'frontend', 'dist');
+
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+
+  // SPA Catch-All Route: send index.html for any frontend navigation routes
   app.get('*', (req, res) => {
-    res.sendFile(path.join(frontendDistPath, 'index.html'));
+    res.sendFile(path.join(distPath, 'index.html'));
   });
 }
 
