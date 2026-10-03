@@ -1,8 +1,15 @@
-const express = require('express');
-const path = require('path');
+
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Standard ES module workaround for __dirname in Node
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const fs = require('fs');
 const multer = require('multer');
-const cors = require('cors');
+
 
 const app = express();
 
