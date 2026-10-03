@@ -125,15 +125,15 @@ const distPath = path.join(__dirname, 'frontend/dist');
 app.use(express.static(distPath));
 
 // Catch-all route to serve React's index.html for SPA routing
-app.get('*', (req, res) => {
+// Change this:
+app.get('(.*)', (req, res) => {
+
+// Catch-all route for SPA fallback (Express 5 compatible)
+app.get('(.*)', (req, res) => {
   const indexPath = path.join(distPath, 'index.html');
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
     res.status(404).send('Build files missing! Please check Render build logs.');
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
 });
