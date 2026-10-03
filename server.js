@@ -5,10 +5,16 @@ const multer = require('multer');
 const cors = require('cors');
 
 const app = express();
-const PORT = 5001;
 
-// Enable CORS for React frontend
-app.use(cors());
+// 1. Dynamic Port Binding for Render
+const PORT = process.env.PORT || 5001;
+
+// 2. Explicit CORS Setup
+app.use(cors({
+  origin: '*', // Allows requests from your Render frontend static site
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 
 // In-memory array to store enriched reports
 const reports = [];
@@ -34,7 +40,7 @@ const upload = multer({
   storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB Limit
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
+    if (file.mimetype && file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
       cb(new Error('Only image files are allowed!'), false);
@@ -48,6 +54,12 @@ app.use('/uploads', express.static(uploadDir));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// 3. Serve Built React Frontend Static Files (if backend is serving frontend)
+const frontendDistPath = path.join(__dirname, 'frontend', 'dist');
+if (fs.existsSync(frontendDistPath)) {
+  app.use(express.static(frontendDistPath));
+}
 
 // API route to handle vehicle report form submissions with extra fields
 app.post('/api/report-vehicle', upload.any(), (req, res) => {
@@ -103,6 +115,13 @@ app.get('/api/reports', (req, res) => {
   });
 });
 
+// 4. SPA Catch-All Route for Frontend Single Page Navigation
+if (fs.existsSync(frontendDistPath)) {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+}
+
 app.listen(PORT, () => {
-  console.log(`RoadClear server running at http://localhost:${PORT}`);
-});frontend 
+  console.log(`RoadClear server running on port ${PORT}`);
+});
