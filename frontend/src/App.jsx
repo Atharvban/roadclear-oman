@@ -1,4 +1,21 @@
 import { useState } from 'react';
+useEffect(() => {
+  const handleBtnClick = (e) => {
+    e.preventDefault();
+    setCurrentView('report');
+  };
+
+  const navBtn = document.getElementById('nav-report-btn');
+  const heroBtn = document.getElementById('hero-report-btn');
+
+  if (navBtn) navBtn.addEventListener('click', handleBtnClick);
+  if (heroBtn) heroBtn.addEventListener('click', handleBtnClick);
+
+  return () => {
+    if (navBtn) navBtn.removeEventListener('click', handleBtnClick);
+    if (heroBtn) heroBtn.removeEventListener('click', handleBtnClick);
+  };
+}, []);
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' or 'report'
