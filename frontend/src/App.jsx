@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' or 'report'
@@ -14,21 +14,6 @@ export default function App() {
     setCurrentView('home');
     window.scrollTo(0, 0);
   };
-
-  // Expose navigation function globally to window for index.html button clicks
-  useEffect(() => {
-    window.navigateView = (view) => {
-      if (view === 'report') {
-        goToReport();
-      } else {
-        goToHome();
-      }
-    };
-
-    return () => {
-      delete window.navigateView;
-    };
-  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,7 +46,7 @@ export default function App() {
 
   return (
     <div style={{ backgroundColor: '#0A0A0B', minHeight: '100vh', color: '#FFFFFF' }}>
-      {/* REACT NAV BACKUP */}
+      {/* NAVBAR */}
       <nav style={styles.nav}>
         <div style={styles.navLogo} onClick={goToHome}>
           <div style={styles.logoMark}></div>
