@@ -347,4 +347,37 @@ const styles = {
   },
   fileInput: {
     width: '100%',
-    padding: '0.
+    padding: '0.8rem',
+    backgroundColor: '#060608',
+    border: '1px dashed #1E1E22',
+    color: '#888888',
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '0.75rem',
+    boxSizing: 'border-box',
+    cursor: 'pointer'
+  },
+  button: {
+    width: '100%',
+    padding: '1rem',
+    backgroundColor: '#FFFFFF',
+    color: '#0A0A0B',
+    border: 'none',
+    fontSize: '0.75rem',
+    fontWeight: '700',
+    fontFamily: "'Space Grotesk', sans-serif",
+    letterSpacing: '0.14em',
+    textTransform: 'uppercase',
+    cursor: 'pointer',
+    marginTop: '0.5rem'
+  },
+  statusBox: {
+    marginTop: '1.5rem',
+    padding: '0.8rem',
+    backgroundColor: '#060608',
+    border: '1px solid #1E1E22',
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: '0.65rem',
+    letterSpacing: '0.1em',
+    color: '#FF3E3E',
+  }
+};
