@@ -127,18 +127,17 @@ const distPath = path.resolve(__dirname, 'frontend', 'dist');
 // Serve compiled static files (JS, CSS, images) from frontend/dist
 app.use(express.static(distPath));
 
-// Express SPA Fallback: ONLY catch GET non-API routes that aren't file requests
-// ✅ Express 5 compatible wildcard route
-app.get('(.*)', (req, res, next) => {
-  if (req.path.includes('.')) {
-    return next();
+// Express SPA Fallback (No route string patterns passed to path-to-regexp)
+app.use((req, res, next) => {
+  if (req.method === 'GET' && !req.path.includes('.')) {
+    const indexPath = path.join(distPath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      return res.sendFile(indexPath);
+    }
   }
-
-  const indexPath = path.join(distPath, 'index.html');
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    res.status(404).send('Build files missing! Please check Render build logs.');
-  }
+  next();
 });
-app.listen
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
