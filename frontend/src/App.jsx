@@ -15,7 +15,7 @@ useEffect(() => {
     if (navBtn) navBtn.removeEventListener('click', handleBtnClick);
     if (heroBtn) heroBtn.removeEventListener('click', handleBtnClick);
   };
-}, []);
+}, []);s
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' or 'report'
