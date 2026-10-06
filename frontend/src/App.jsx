@@ -5,23 +5,20 @@ export default function App() {
   const [status, setStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Scroll to top whenever switching between Home and Report views
   useEffect(() => {
-    const handleBtnClick = (e) => {
-      e.preventDefault();
-      setCurrentView('report');
-    };
+    window.scrollTo(0, 0);
+  }, [currentView]);
 
-    const navBtn = document.getElementById('nav-report-btn');
-    const heroBtn = document.getElementById('hero-report-btn');
+  const handleNavigateToReport = (e) => {
+    if (e) e.preventDefault();
+    setCurrentView('report');
+  };
 
-    if (navBtn) navBtn.addEventListener('click', handleBtnClick);
-    if (heroBtn) heroBtn.addEventListener('click', handleBtnClick);
-
-    return () => {
-      if (navBtn) navBtn.removeEventListener('click', handleBtnClick);
-      if (heroBtn) heroBtn.removeEventListener('click', handleBtnClick);
-    };
-  }, []);
+  const handleNavigateToHome = (e) => {
+    if (e) e.preventDefault();
+    setCurrentView('home');
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,7 +28,6 @@ export default function App() {
     const formData = new FormData(event.target);
 
     try {
-      // Send directly to Express backend service endpoint
       const response = await fetch('https://roadclear-oman-backend.onrender.com/api/report-vehicle', {
         method: 'POST',
         body: formData,
@@ -57,22 +53,23 @@ export default function App() {
     <>
       {/* NAV HEADER */}
       <nav style={styles.nav}>
-        <div style={styles.navLogo} onClick={() => setCurrentView('home')}>
+        <div style={styles.navLogo} onClick={handleNavigateToHome}>
           <div style={styles.logoMark}></div>
           <div style={styles.logoText}>Road<span style={{ color: '#FF3E3E' }}>Clear</span></div>
         </div>
 
         <div style={styles.navLinks}>
           <button 
+            type="button"
             style={currentView === 'home' ? styles.activeNavLink : styles.navLink} 
-            onClick={() => setCurrentView('home')}
+            onClick={handleNavigateToHome}
           >
             Home
           </button>
           <button 
-            id="nav-report-btn"
+            type="button"
             style={currentView === 'report' ? styles.activeNavLink : styles.navLink} 
-            onClick={() => setCurrentView('report')}
+            onClick={handleNavigateToReport}
           >
             Report Vehicle
           </button>
@@ -90,9 +87,9 @@ export default function App() {
               Report abandoned, wrecked, or obstructing vehicles directly to the urban management and ROP response grid.
             </p>
             <button 
-              id="hero-report-btn"
+              type="button"
               style={styles.ctaBtn} 
-              onClick={() => setCurrentView('report')}
+              onClick={handleNavigateToReport}
             >
               ⬡ Report an Abandoned Vehicle
             </button>
@@ -128,7 +125,6 @@ export default function App() {
                 />
               </div>
 
-              {/* LOCATION / WILAYAT */}
               <div style={styles.fieldGroup}>
                 <label style={styles.label}>Location // Wilayat</label>
                 <input 
@@ -139,7 +135,6 @@ export default function App() {
                 />
               </div>
 
-              {/* LICENSE PLATE */}
               <div style={styles.fieldGroup}>
                 <label style={styles.label}>Plate Number</label>
                 <input 
@@ -150,7 +145,6 @@ export default function App() {
                 />
               </div>
 
-              {/* INCIDENT NOTES */}
               <div style={styles.fieldGroup}>
                 <label style={styles.label}>Notes // Description</label>
                 <textarea 
@@ -353,37 +347,4 @@ const styles = {
   },
   fileInput: {
     width: '100%',
-    padding: '0.8rem',
-    backgroundColor: '#060608',
-    border: '1px dashed #1E1E22',
-    color: '#888888',
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '0.75rem',
-    boxSizing: 'border-box',
-    cursor: 'pointer'
-  },
-  button: {
-    width: '100%',
-    padding: '1rem',
-    backgroundColor: '#FFFFFF',
-    color: '#0A0A0B',
-    border: 'none',
-    fontSize: '0.75rem',
-    fontWeight: '700',
-    fontFamily: "'Space Grotesk', sans-serif",
-    letterSpacing: '0.14em',
-    textTransform: 'uppercase',
-    cursor: 'pointer',
-    marginTop: '0.5rem'
-  },
-  statusBox: {
-    marginTop: '1.5rem',
-    padding: '0.8rem',
-    backgroundColor: '#060608',
-    border: '1px solid #1E1E22',
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: '0.65rem',
-    letterSpacing: '0.1em',
-    color: '#FF3E3E',
-  }
-};
+    padding: '0.
