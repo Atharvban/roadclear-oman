@@ -1,23 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' or 'report'
   const [status, setStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Scroll to top whenever switching between Home and Report views
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentView]);
-
-  const handleNavigateToReport = (e) => {
-    if (e) e.preventDefault();
+  const goToReport = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setCurrentView('report');
+    window.scrollTo(0, 0);
   };
 
-  const handleNavigateToHome = (e) => {
-    if (e) e.preventDefault();
+  const goToHome = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     setCurrentView('home');
+    window.scrollTo(0, 0);
   };
 
   const handleSubmit = async (event) => {
@@ -50,10 +53,10 @@ export default function App() {
   };
 
   return (
-    <>
+    <div style={{ backgroundColor: '#0A0A0B', minHeight: '100vh', color: '#FFFFFF' }}>
       {/* NAV HEADER */}
       <nav style={styles.nav}>
-        <div style={styles.navLogo} onClick={handleNavigateToHome}>
+        <div style={styles.navLogo} onClick={goToHome}>
           <div style={styles.logoMark}></div>
           <div style={styles.logoText}>Road<span style={{ color: '#FF3E3E' }}>Clear</span></div>
         </div>
@@ -62,23 +65,22 @@ export default function App() {
           <button 
             type="button"
             style={currentView === 'home' ? styles.activeNavLink : styles.navLink} 
-            onClick={handleNavigateToHome}
+            onClick={goToHome}
           >
             Home
           </button>
           <button 
             type="button"
             style={currentView === 'report' ? styles.activeNavLink : styles.navLink} 
-            onClick={handleNavigateToReport}
+            onClick={goToReport}
           >
             Report Vehicle
           </button>
         </div>
       </nav>
 
-      {/* VIEW SWITCHER */}
-      {currentView === 'home' ? (
-        /* HERO / MAIN SITE VIEW */
+      {/* VIEW 1: HERO HOME VIEW */}
+      {currentView === 'home' && (
         <div style={styles.heroContainer}>
           <div style={styles.heroContent}>
             <div style={styles.sTag}>SYS // 01 · MUSCAT MUNICIPALITY</div>
@@ -89,14 +91,16 @@ export default function App() {
             <button 
               type="button"
               style={styles.ctaBtn} 
-              onClick={handleNavigateToReport}
+              onClick={goToReport}
             >
               ⬡ Report an Abandoned Vehicle
             </button>
           </div>
         </div>
-      ) : (
-        /* REPORT FORM VIEW */
+      )}
+
+      {/* VIEW 2: REPORT FORM VIEW */}
+      {currentView === 'report' && (
         <div style={styles.container}>
           <div style={styles.card}>
             <div style={styles.sTag}>SYS // 02 · STREET REPORT</div>
@@ -175,7 +179,7 @@ export default function App() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
