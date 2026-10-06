@@ -128,8 +128,8 @@ const distPath = path.resolve(__dirname, 'frontend', 'dist');
 app.use(express.static(distPath));
 
 // Express SPA Fallback: ONLY catch GET non-API routes that aren't file requests
-app.get('*', (req, res, next) => {
-  // If request asks for a file (e.g. .js, .css, .ico) that static middleware missed, return 404 instead of index.html
+// ✅ Express 5 compatible wildcard route
+app.get('(.*)', (req, res, next) => {
   if (req.path.includes('.')) {
     return next();
   }
@@ -141,5 +141,4 @@ app.get('*', (req, res, next) => {
     res.status(404).send('Build files missing! Please check Render build logs.');
   }
 });
-
 app.listen
