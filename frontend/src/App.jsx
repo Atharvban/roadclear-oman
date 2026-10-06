@@ -1,28 +1,29 @@
-import { useState } from 'react';
-useEffect(() => {
-  const handleBtnClick = (e) => {
-    e.preventDefault();
-    setCurrentView('report');
-  };
-
-  const navBtn = document.getElementById('nav-report-btn');
-  const heroBtn = document.getElementById('hero-report-btn');
-
-  if (navBtn) navBtn.addEventListener('click', handleBtnClick);
-  if (heroBtn) heroBtn.addEventListener('click', handleBtnClick);
-
-  return () => {
-    if (navBtn) navBtn.removeEventListener('click', handleBtnClick);
-    if (heroBtn) heroBtn.removeEventListener('click', handleBtnClick);
-  };
-}, []);s
+import { useState, useEffect } from 'react';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' or 'report'
   const [status, setStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-const handleSubmit = async (event) => {
+  useEffect(() => {
+    const handleBtnClick = (e) => {
+      e.preventDefault();
+      setCurrentView('report');
+    };
+
+    const navBtn = document.getElementById('nav-report-btn');
+    const heroBtn = document.getElementById('hero-report-btn');
+
+    if (navBtn) navBtn.addEventListener('click', handleBtnClick);
+    if (heroBtn) heroBtn.addEventListener('click', handleBtnClick);
+
+    return () => {
+      if (navBtn) navBtn.removeEventListener('click', handleBtnClick);
+      if (heroBtn) heroBtn.removeEventListener('click', handleBtnClick);
+    };
+  }, []);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
     setStatus('[PROCESSING] Transmitting report to ROP pipeline...');
@@ -69,6 +70,7 @@ const handleSubmit = async (event) => {
             Home
           </button>
           <button 
+            id="nav-report-btn"
             style={currentView === 'report' ? styles.activeNavLink : styles.navLink} 
             onClick={() => setCurrentView('report')}
           >
@@ -88,6 +90,7 @@ const handleSubmit = async (event) => {
               Report abandoned, wrecked, or obstructing vehicles directly to the urban management and ROP response grid.
             </p>
             <button 
+              id="hero-report-btn"
               style={styles.ctaBtn} 
               onClick={() => setCurrentView('report')}
             >
@@ -125,7 +128,7 @@ const handleSubmit = async (event) => {
                 />
               </div>
 
-              {/* NEW FIELD: LOCATION / WILAYAT */}
+              {/* LOCATION / WILAYAT */}
               <div style={styles.fieldGroup}>
                 <label style={styles.label}>Location // Wilayat</label>
                 <input 
@@ -136,7 +139,7 @@ const handleSubmit = async (event) => {
                 />
               </div>
 
-              {/* NEW FIELD: LICENSE PLATE */}
+              {/* LICENSE PLATE */}
               <div style={styles.fieldGroup}>
                 <label style={styles.label}>Plate Number</label>
                 <input 
@@ -147,7 +150,7 @@ const handleSubmit = async (event) => {
                 />
               </div>
 
-              {/* NEW FIELD: INCIDENT NOTES */}
+              {/* INCIDENT NOTES */}
               <div style={styles.fieldGroup}>
                 <label style={styles.label}>Notes // Description</label>
                 <textarea 
