@@ -15,33 +15,18 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
-  // Attach event listeners to index.html anchor tags
+  // Expose navigation function globally to window for index.html button clicks
   useEffect(() => {
-    const handleHomeClick = (e) => {
-      e.preventDefault();
-      goToHome();
+    window.navigateView = (view) => {
+      if (view === 'report') {
+        goToReport();
+      } else {
+        goToHome();
+      }
     };
-
-    const handleReportClick = (e) => {
-      e.preventDefault();
-      goToReport();
-    };
-
-    const navMarketplace = document.getElementById('nav-marketplace');
-    const navReport = document.getElementById('nav-report');
-    const heroMarketplace = document.getElementById('hero-marketplace');
-    const heroReport = document.getElementById('hero-report');
-
-    navMarketplace?.addEventListener('click', handleHomeClick);
-    heroMarketplace?.addEventListener('click', handleHomeClick);
-    navReport?.addEventListener('click', handleReportClick);
-    heroReport?.addEventListener('click', handleReportClick);
 
     return () => {
-      navMarketplace?.removeEventListener('click', handleHomeClick);
-      heroMarketplace?.removeEventListener('click', handleHomeClick);
-      navReport?.removeEventListener('click', handleReportClick);
-      heroReport?.removeEventListener('click', handleReportClick);
+      delete window.navigateView;
     };
   }, []);
 
