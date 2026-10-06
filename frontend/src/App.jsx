@@ -1,27 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home' or 'report'
   const [status, setStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const goToReport = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+  const goToReport = () => {
     setCurrentView('report');
     window.scrollTo(0, 0);
   };
 
-  const goToHome = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+  const goToHome = () => {
     setCurrentView('home');
     window.scrollTo(0, 0);
   };
+
+  // Attach event listeners to index.html anchor tags
+  useEffect(() => {
+    const handleHomeClick = (e) => {
+      e.preventDefault();
+      goToHome();
+    };
+
+    const handleReportClick = (e) => {
+      e.preventDefault();
+      goToReport();
+    };
+
+    const navMarketplace = document.getElementById('nav-marketplace');
+    const navReport = document.getElementById('nav-report');
+    const heroMarketplace = document.getElementById('hero-marketplace');
+    const heroReport = document.getElementById('hero-report');
+
+    navMarketplace?.addEventListener('click', handleHomeClick);
+    heroMarketplace?.addEventListener('click', handleHomeClick);
+    navReport?.addEventListener('click', handleReportClick);
+    heroReport?.addEventListener('click', handleReportClick);
+
+    return () => {
+      navMarketplace?.removeEventListener('click', handleHomeClick);
+      heroMarketplace?.removeEventListener('click', handleHomeClick);
+      navReport?.removeEventListener('click', handleReportClick);
+      heroReport?.removeEventListener('click', handleReportClick);
+    };
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,27 +76,29 @@ export default function App() {
 
   return (
     <div style={{ backgroundColor: '#0A0A0B', minHeight: '100vh', color: '#FFFFFF' }}>
-      {/* NAV HEADER */}
+      {/* REACT NAV BACKUP */}
       <nav style={styles.nav}>
         <div style={styles.navLogo} onClick={goToHome}>
           <div style={styles.logoMark}></div>
-          <div style={styles.logoText}>Road<span style={{ color: '#FF3E3E' }}>Clear</span></div>
+          <div style={styles.logoText}>
+            Road<span style={{ color: '#FF3E3E' }}>Clear</span>
+          </div>
         </div>
 
         <div style={styles.navLinks}>
           <button 
-            type="button"
+            type="button" 
             style={currentView === 'home' ? styles.activeNavLink : styles.navLink} 
             onClick={goToHome}
           >
-            Home
+            Marketplace
           </button>
           <button 
-            type="button"
+            type="button" 
             style={currentView === 'report' ? styles.activeNavLink : styles.navLink} 
             onClick={goToReport}
           >
-            Report Vehicle
+            File Report
           </button>
         </div>
       </nav>
@@ -89,7 +113,7 @@ export default function App() {
               Report abandoned, wrecked, or obstructing vehicles directly to the urban management and ROP response grid.
             </p>
             <button 
-              type="button"
+              type="button" 
               style={styles.ctaBtn} 
               onClick={goToReport}
             >
