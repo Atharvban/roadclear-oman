@@ -4,7 +4,7 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "build": "npm install && cd frontend && npm install && npx vite build",
+    "build": "npm install && npm --prefix frontend install && npm run build --prefix frontend",
     "start": "node server.js"
   },
   "dependencies": {
