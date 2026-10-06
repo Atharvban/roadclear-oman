@@ -21,6 +21,10 @@ app.use(cors({
   credentials: true
 }));
 
+// Middleware for parsing requests
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 // In-memory array to store enriched reports
 const reports = [];
 
@@ -52,10 +56,6 @@ const upload = multer({
     }
   }
 });
-
-// Middleware for parsing requests
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 
 // Serve uploads folder
 app.use('/uploads', express.static(uploadDir));
@@ -119,12 +119,21 @@ app.get('/api/reports', (req, res) => {
   });
 });
 
-// Serve static files directly from Vite's output 'dist' folder inside frontend/
-const distPath = path.join(__dirname, 'frontend/dist');
+// --- FRONTEND STATIC SERVING & SPA FALLBACK ---
+
+// Absolute path to frontend/dist directory
+const distPath = path.resolve(__dirname, 'frontend', 'dist');
+
+// Serve compiled static files (JS, CSS, images) from frontend/dist
 app.use(express.static(distPath));
 
-// Express 5 catch-all fallback route (NO PATH SPECIFIER NEEDED)
-app.use((req, res) => {
+// Express SPA Fallback: ONLY catch GET non-API routes that aren't file requests
+app.get('*', (req, res, next) => {
+  // If request asks for a file (e.g. .js, .css, .ico) that static middleware missed, return 404 instead of index.html
+  if (req.path.includes('.')) {
+    return next();
+  }
+
   const indexPath = path.join(distPath, 'index.html');
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
@@ -133,6 +142,4 @@ app.use((req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen
