@@ -121,28 +121,16 @@ app.get('/api/reports', (req, res) => {
 
 // Serve static files directly from Vite's output 'dist' folder inside frontend/
 const distPath = path.join(__dirname, 'frontend/dist');
-
 app.use(express.static(distPath));
 
-// Catch-all route for Express 5 compatibility
-app.get('(.*)', (req, res) => {
+// Express 5 catch-all fallback route (NO PATH SPECIFIER NEEDED)
+app.use((req, res) => {
   const indexPath = path.join(distPath, 'index.html');
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
     res.status(404).send('Build files missing! Please check Render build logs.');
   }
-});
-
-// ... all your app.post and app.get API routes are above here ...
-
-// Catch-all route for SPA fallback (MUST BE LAST)
-app.get('{*splat}', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
 });
 
 app.listen(PORT, () => {
